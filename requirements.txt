@@ -1,0 +1,19 @@
+# Core Dependencies
+Flask==3.0.0
+flask-cors==4.0.0
+flask-limiter==3.5.0
+
+# AI/ML Libraries
+anthropic==0.18.1
+google-generativeai>=0.3.0
+numpy>=1.26.0
+
+# Utilities
+python-dotenv==1.0.0
+
+# Database
+# SQLite viene incluido con Python
+
+# Development (opcional)
+pytest>=7.4.3
+pytest-cov>=4.1.0

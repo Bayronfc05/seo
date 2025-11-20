@@ -1,0 +1,19 @@
+# Flask y extensiones web
+Flask==3.0.0
+flask-cors==4.0.0
+Flask-Limiter==3.5.0
+
+# Anthropic Claude API
+anthropic==0.18.1
+
+# Procesamiento y cálculos
+numpy==1.26.3
+
+# Configuración y variables de entorno
+python-dotenv==1.0.0
+
+# Logging mejorado
+colorlog==6.8.2
+
+# Servidor WSGI para producción (opcional)
+gunicorn==21.2.0

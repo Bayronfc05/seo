@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Content Generator - IA Agéntica</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>SEO Content Generator</h1>
+            </div>
+            <div class="status">
+                <span class="status-indicator" id="status"></span>
+                <span id="statusText">Conectando...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="generate">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Generar</span>
+                    </button>
+                    <button class="nav-btn" data-tab="history">
+                        <i class="fas fa-history"></i>
+                        <span>Historial</span>
+                    </button>
+                    <button class="nav-btn" data-tab="stats">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Estadísticas</span>
+                    </button>
+                    <button class="nav-btn" data-tab="strategies">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Estrategias</span>
+                    </button>
+                </nav>
+                
+                <div class="quick-stats">
+                    <h3>Resumen Rápido</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Generado:</span>
+                        <span class="stat-value" id="quickTotalGens">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Mejor Estrategia:</span>
+                        <span class="stat-value" id="quickBestStrategy">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Score Promedio:</span>
+                        <span class="stat-value" id="quickAvgScore">0</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <!-- Tab: Generate -->
+                <div class="tab-content active" id="tab-generate">
+                    <h2><i class="fas fa-magic"></i> Generar Contenido SEO</h2>
+                    
+                    <form id="generateForm" class="generate-form">
+                        <div class="form-group">
+                            <label for="topic">
+                                <i class="fas fa-heading"></i> Tema del Artículo
+                            </label>
+                            <input 
+                                type="text" 
+                                id="topic" 
+                                placeholder="Ej: Inteligencia Artificial en 2025"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="keywords">
+                                <i class="fas fa-tags"></i> Keywords (separadas por comas)
+                            </label>
+                            <input 
+                                type="text" 
+                                id="keywords" 
+                                placeholder="Ej: IA, machine learning, tecnología"
+                                required
+                            >
+                            <small>Tip: La primera keyword será la principal</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="targetLength">
+                                    <i class="fas fa-ruler"></i> Longitud objetivo (400-1500 palabras)
+                                </label>
+                                <input
+                                    type="number"
+                                    id="targetLength"
+                                    value="600"
+                                    min="400"
+                                    max="1500"
+                                    title="La longitud debe estar entre 400 y 1500 palabras"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="strategy">
+                                    <i class="fas fa-brain"></i> Estrategia
+                                </label>
+                                <select id="strategy">
+                                    <option value="auto">Auto (IA decide)</option>
+                                    <option value="0">Informativo Profesional</option>
+                                    <option value="1">Conversacional Amigable</option>
+                                    <option value="2">Lista Práctica</option>
+                                    <option value="3">Storytelling</option>
+                                    <option value="4">Pregunta-Respuesta</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="generateBtn">
+                            <i class="fas fa-bolt"></i> Generar Contenido
+                        </button>
+                    </form>
+
+                    <!-- Loading -->
+                    <div class="loading" id="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Generando contenido con IA...</p>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="result" id="result" style="display: none;">
+                        <div class="result-header">
+                            <h3><i class="fas fa-check-circle"></i> Contenido Generado</h3>
+                            <div class="result-actions">
+                                <button class="btn btn-secondary" id="copyBtn">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                                <button class="btn btn-secondary" id="downloadBtn">
+                                    <i class="fas fa-download"></i> Descargar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-info">
+                            <div class="info-card">
+                                <div class="info-label">Estrategia</div>
+                                <div class="info-value" id="resultStrategy">-</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Score SEO</div>
+                                <div class="info-value score" id="resultScore">0</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">CTR Esperado</div>
+                                <div class="info-value" id="resultCTR">0%</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Posición</div>
+                                <div class="info-value" id="resultPosition">#0</div>
+                            </div>
+                        </div>
+
+                        <div class="result-content" id="resultContent"></div>
+
+                        <div class="result-metrics">
+                            <h4>Métricas Detalladas</h4>
+                            <div class="metrics-grid">
+                                <div class="metric">
+                                    <i class="fas fa-clock"></i>
+                                    <div>
+                                        <div class="metric-label">Tiempo en Página</div>
+                                        <div class="metric-value" id="metricTime">0s</div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <i class="fas fa-mouse-pointer"></i>
+                                    <div>
+                                        <div class="metric-label">Tasa de Rebote</div>
+                                        <div class="metric-value" id="metricBounce">0%</div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <i class="fas fa-coins"></i>
+                                    <div>
+                                        <div class="metric-label">Tokens Usados</div>
+                                        <div class="metric-value" id="metricTokens">0</div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <div>
+                                        <div class="metric-label">Tiempo Generación</div>
+                                        <div class="metric-value" id="metricGenTime">0s</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: History -->
+                <div class="tab-content" id="tab-history">
+                    <h2><i class="fas fa-history"></i> Historial de Generaciones</h2>
+                    <div class="history-list" id="historyList">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No hay generaciones aún</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Stats -->
+                <div class="tab-content" id="tab-stats">
+                    <h2><i class="fas fa-chart-line"></i> Estadísticas y Aprendizaje</h2>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-card-content">
+                                <div class="stat-card-value" id="statTotalGens">0</div>
+                                <div class="stat-card-label">Total Generado</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-card-content">
+                                <div class="stat-card-value" id="statBestStrategy">-</div>
+                                <div class="stat-card-label">Mejor Estrategia</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-card-content">
+                                <div class="stat-card-value" id="statAvgReward">0.000</div>
+                                <div class="stat-card-label">Recompensa Promedio</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-card-content">
+                                <div class="stat-card-value" id="statTotalTokens">0</div>
+                                <div class="stat-card-label">Tokens Totales</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <h3>Rendimiento por Estrategia</h3>
+                            <canvas id="strategyChart"></canvas>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Q-Values (Aprendizaje RL)</h3>
+                            <canvas id="qvaluesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="strategy-table-container">
+                        <h3>Desglose por Estrategia</h3>
+                        <table class="strategy-table" id="strategyTable">
+                            <thead>
+                                <tr>
+                                    <th>Estrategia</th>
+                                    <th>Usos</th>
+                                    <th>Recompensa Avg</th>
+                                    <th>SEO Score Avg</th>
+                                    <th>Q-Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="strategyTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: Strategies -->
+                <div class="tab-content" id="tab-strategies">
+                    <h2><i class="fas fa-lightbulb"></i> Estrategias Disponibles</h2>
+                    <div class="strategies-grid" id="strategiesGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
